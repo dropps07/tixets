@@ -57,6 +57,15 @@ npm run dev
 
 ![Screenshot 2025-03-08 140744](https://github.com/user-attachments/assets/6b777aa9-58b3-4f5a-a1e3-3df171b58700)
 
+##🚀 Why Choose Our Platform?
+
+✅ Fully Decentralized – Say goodbye to middlemen. Every transaction happens directly on EduChain, ensuring fair pricing and no manipulation.
+✅ Tamper-Proof Transactions – Blockchain-backed security means tickets can't be counterfeited or duplicated.
+✅ Seamless Experience – A smooth and intuitive UI built with Next.js & Tailwind CSS, making buying and selling tickets effortless.
+✅ Instant Ownership Transfers – No waiting, no delays. When you buy a ticket, it’s immediately yours on the blockchain.
+
+Join the future of event ticketing – fair
+
 
 ## 🔗 Links
 
