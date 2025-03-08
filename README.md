@@ -33,7 +33,7 @@ npm run dev
 1. Connect your EduChain Chain wallet
 2. Create Events
 3. Explore Events
-4. Submit and you check that in your Past Events
+4. Purchased Tickets are present in your Profile  
 
 ## 🔮 Vision
 1. **🎟 Revolutionizing Event Ticketing** :– Enabling fair, transparent, and tamper-proof ticketing with blockchain.
