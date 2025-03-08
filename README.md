@@ -56,3 +56,12 @@ npm run dev
 ![Screenshot 2025-03-08 140345](https://github.com/user-attachments/assets/045c736b-9d96-4659-b1e2-9232b1b95c85)
 
 ![Screenshot 2025-03-08 140744](https://github.com/user-attachments/assets/6b777aa9-58b3-4f5a-a1e3-3df171b58700)
+
+## Warning
+These contracts are **UNSAFE** and should **NEVER** be deployed on any production network. They contain known vulnerabilities that would result in loss of funds if exploited.
+
+## 🔗 Links
+
+- [EduChain Chain Explorer](https://bridge.gelato.network/bridge/open-campus-codex)
+
+Built with ❤️ by the dropps07
