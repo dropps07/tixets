@@ -36,7 +36,7 @@ npm run dev
 4. Purchased Tickets are present in your Profile
 
 ## Note
-- Must have required EDU test tokens
+*Must have required EDU test tokens*
 Get Some from here
 - [EDUCHAIN community faucet](https://educhain-community-faucet.vercel.app/)
 - [HackQuest Faucet](https://www.hackquest.io/zh-cn/faucets/656476)    
