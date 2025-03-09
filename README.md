@@ -33,7 +33,13 @@ npm run dev
 1. Connect your EduChain Chain wallet
 2. Create Events
 3. Explore Events
-4. Purchased Tickets are present in your Profile  
+4. Purchased Tickets are present in your Profile
+
+## Note
+- Must have required EDU test tokens
+Get Some from here
+- [EDUCHAIN community faucet](https://educhain-community-faucet.vercel.app/)
+- [HackQuest Faucet](https://www.hackquest.io/zh-cn/faucets/656476)    
 
 ## 🔮 Vision
 1. **🎟 Revolutionizing Event Ticketing** :– Enabling fair, transparent, and tamper-proof ticketing with blockchain.
