@@ -37,7 +37,7 @@ export default function Home() {
         initial="hidden"
         animate="visible"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black to-black"></div>
+        <div className="absolute inset-0 bg-black "></div>
         <motion.h1 
           className="text-5xl md:text-7xl font-bold mb-6 text-white relative z-10"
           variants={itemVariants}
@@ -61,15 +61,15 @@ export default function Home() {
           variants={itemVariants}
         >
           <Link 
-            href="/events" 
-            className="bg-black border-2 border-white group px-8 py-3 rounded-full text-lg font-semibold flex items-center justify-center hover:bg-white-900 text-white transition-colors"
-          >
-            Explore Events
-            <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
-          </Link>
+  href="/events" 
+  className="bg-black border-2 border-white group px-8 py-3 rounded-full text-lg font-semibold flex items-center justify-center hover:bg-white hover:border-black text-white hover:text-black transition-colors"
+>
+  Explore Events
+  <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+</Link>
           <Link 
             href="/create-event" 
-            className="bg-black text-white border-2 border-white group px-8 py-3 rounded-full text-lg font-semibold flex items-center justify-center hover:bg-white-900 text-black transition-colors"
+            className="bg-black text-white border-2 border-white group px-8 py-3 rounded-full text-lg font-semibold flex items-center justify-center hover:bg-white hover:border-black hover:text-black transition-colors"
           >
             Create Event
             <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
