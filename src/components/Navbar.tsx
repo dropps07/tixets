@@ -13,99 +13,205 @@ const Navbar = () => {
   const [address, setAddress] = useState('');
   const [username, setUsername] = useState('');
   const [showModal, setShowModal] = useState(false);
-
-  useEffect(() => {
-    const checkConnection = async () => {
-      if (typeof window.ethereum !== 'undefined') {
-        try {
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-          const signer = provider.getSigner();
-          const address = await signer.getAddress();
-          setAddress(address);
-          setIsConnected(true);
-
-          const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-          const profile = await contract.getUserProfile(address);
-          if (profile.username) {
-            setUsername(profile.username);
-          } else {
-            setShowModal(true);
-          }
-        } catch (error) {
-          console.error('Error checking connection:', error);
-        }
-      }
-    };
-
-    checkConnection();
-  }, []);
-  const EDUCHAIN_PARAMS = {
-    chainId: '656476', //   EduChain ID)
-    chainName: 'EduChain',
-    nativeCurrency: {
-      name: 'Wei',
-      symbol: 'EDU',
-      decimals: 18,
-    },
-    rpcUrls: ['https://open-campus-codex.gelato.digital'], // RPC URL
-    blockExplorerUrls: ['https://opencampus-codex.blockscout.com'], // explorer URL
-  };
-  
-  const switchToEduChain = async () => {
+   // Define checkConnection function outside of useEffect so it can be called elsewhere
+const checkConnection = async () => {
+  if (typeof window.ethereum !== 'undefined') {
     try {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: EDUCHAIN_PARAMS.chainId }],
-      });
-      console.log('Switched to EduChain');
-    } catch (switchError: any) {
-      // If the network is not added, prompt the user to add it
-      if (switchError.code === 4902) {
-        try {
-          await window.ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [EDUCHAIN_PARAMS],
-          });
-        } catch (addError) {
-          console.error('Error adding EduChain:', addError);
-        }
-      } else {
-        console.error('Error switching network:', switchError);
+      // Check if we're connected to EduChain first
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const network = await provider.getNetwork();
+      
+      // Convert EDUCHAIN_PARAMS.chainId to the format needed for comparison
+      const eduChainId = parseInt(EDUCHAIN_PARAMS.chainId, 16);
+      
+      // If not on EduChain, don't proceed with auto-connection
+      if (network.chainId !== eduChainId) {
+        console.log('Not connected to EduChain. Please connect to correct network.');
+        return;
       }
+      
+      const signer = provider.getSigner();
+      const address = await signer.getAddress();
+      setAddress(address);
+      setIsConnected(true);
+
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+      const profile = await contract.getUserProfile(address);
+      if (profile.username) {
+        setUsername(profile.username);
+      } else {
+        setShowModal(true);
+      }
+    } catch (error) {
+      console.error('Error checking connection:', error);
     }
-  };
-  
-  const connectWallet = async () => {
-    if (typeof window.ethereum !== 'undefined') {
+  }
+};
+
+// Initial connection check
+useEffect(() => {
+  checkConnection();
+}, []);
+
+// Fix EDUCHAIN_PARAMS to use proper hex format for chainId
+const EDUCHAIN_PARAMS = {
+  chainId: '0x' + Number(656476).toString(16), // Convert to hex with 0x prefix
+  chainName: 'EduChain',
+  nativeCurrency: {
+    name: 'Wei',
+    symbol: 'EDU',
+    decimals: 18,
+  },
+  rpcUrls: ['https://open-campus-codex.gelato.digital'],
+  blockExplorerUrls: ['https://opencampus-codex.blockscout.com'],
+};
+
+const switchToEduChain = async () => {
+  try {
+    // Using the correct format for chainId (with '0x' prefix)
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: EDUCHAIN_PARAMS.chainId }],
+    });
+    console.log('Switched to EduChain');
+    return true;
+  } catch (switchError: any) {
+    // If the network is not added, prompt the user to add it
+    if (switchError.code === 4902) {
       try {
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-  
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const address = await signer.getAddress();
-        setAddress(address);
-        setIsConnected(true);
-  
-        const network = await provider.getNetwork();
-        if (network.chainId !== parseInt(EDUCHAIN_PARAMS.chainId, 16)) {
-          await switchToEduChain();
-        }
-  
-        const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+        await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [EDUCHAIN_PARAMS],
+        });
+        // Try switching again after adding
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: EDUCHAIN_PARAMS.chainId }],
+        });
+        return true;
+      } catch (addError) {
+        console.error('Error adding EduChain:', addError);
+        alert('Failed to add EduChain network. Please add it manually.');
+        return false;
+      }
+    } else {
+      console.error('Error switching network:', switchError);
+      alert('Failed to switch to EduChain. Please switch manually.');
+      return false;
+    }
+  }
+};
+
+const connectWallet = async () => {
+  if (typeof window.ethereum !== 'undefined') {
+    try {
+      // Request account access
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      
+      // Use let instead of const so we can reassign later
+      let provider = new ethers.providers.Web3Provider(window.ethereum);
+      
+      // Check if on the correct network and switch if needed
+      const network = await provider.getNetwork();
+      const eduChainId = parseInt(EDUCHAIN_PARAMS.chainId, 16); 
+      
+      if (network.chainId !== eduChainId) {
+        const switched = await switchToEduChain();
+        if (!switched) return; // Exit if network switch failed
+        
+        // Get fresh provider after network switch
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+      }
+      
+      // Now we can proceed with connection
+      const signer = provider.getSigner();
+      const address = await signer.getAddress();
+      setAddress(address);
+      setIsConnected(true);
+
+      // Interact with the contract
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+      try {
         const profile = await contract.getUserProfile(address);
         if (profile.username) {
           setUsername(profile.username);
         } else {
           setShowModal(true);
         }
-      } catch (error) {
-        console.error('Error connecting wallet:', error);
+      } catch (contractError) {
+        console.error('Error fetching user profile:', contractError);
+        setShowModal(true); // Assume new user if contract call fails
       }
-    } else {
-      alert('Please install MetaMask!');
+    } catch (error) {
+      console.error('Error connecting wallet:', error);
     }
-  };
-  
+  } else {
+    alert('Please install MetaMask!');
+  }
+};
+
+// Helper function to check user profile
+const checkUserProfile = async (address: string) => {
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+    
+    const profile = await contract.getUserProfile(address);
+    if (profile.username) {
+      setUsername(profile.username);
+    } else {
+      setShowModal(true);
+    }
+  } catch (error) {
+    console.error('Error checking user profile:', error);
+    setShowModal(true);
+  }
+};
+
+// Add wallet event listeners
+useEffect(() => {
+  if (window.ethereum) {
+    // Handle chain changes
+    const handleChainChanged = (chainId: string) => {
+      console.log('Network changed to:', chainId);
+      const eduChainIdHex = EDUCHAIN_PARAMS.chainId;
+      
+      if (chainId !== eduChainIdHex) {
+        setIsConnected(false);
+        setAddress('');
+        setUsername('');
+        alert('Please connect to EduChain network to use this application');
+      } else {
+        // Reconnect if switched to the correct chain
+        checkConnection();
+      }
+    };
+    
+    // Handle account changes
+    const handleAccountsChanged = (accounts: string[]) => {
+      if (accounts.length === 0) {
+        // User disconnected their wallet
+        setIsConnected(false);
+        setAddress('');
+        setUsername('');
+      } else {
+        // Account changed, update state and check profile
+        setAddress(accounts[0]);
+        checkUserProfile(accounts[0]);
+      }
+    };
+    
+    window.ethereum.on('chainChanged', handleChainChanged);
+    window.ethereum.on('accountsChanged', handleAccountsChanged);
+    
+    // Cleanup listeners on component unmount
+    return () => {
+      window.ethereum.removeListener('chainChanged', handleChainChanged);
+      window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+    };
+  }
+}, []);
   const handleUsernameRegistration = (newUsername: string) => {
     setUsername(newUsername);
   };
@@ -169,9 +275,9 @@ const Navbar = () => {
                 <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-purple-600/20 to-cyan-300/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 <span className="relative z-10 flex items-center">
                   <span className="mr-2 text-cyan-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"></path>
-                    </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-wallet" viewBox="0 0 16 16">
+  <path d="M0 3a2 2 0 0 1 2-2h13.5a.5.5 0 0 1 0 1H15v2a1 1 0 0 1 1 1v8.5a1.5 1.5 0 0 1-1.5 1.5h-12A2.5 2.5 0 0 1 0 12.5zm1 1.732V12.5A1.5 1.5 0 0 0 2.5 14h12a.5.5 0 0 0 .5-.5V5H2a2 2 0 0 1-1-.268M1 3a1 1 0 0 0 1 1h12V2H2a1 1 0 0 0-1 1"/>
+</svg>
                   </span>
                   Connect Wallet
                 </span>
