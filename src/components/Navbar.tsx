@@ -16,7 +16,7 @@ const Navbar = () => {
  
 const EDUCHAIN_PARAMS = {
   chainId: '0x' + Number(656476).toString(16), // Convert to hex with 0x prefix
-  chainName: 'EduChain',
+  chainName: 'EDU Chain Testnet',
   nativeCurrency: {
     name: 'Wei',
     symbol: 'EDU',
