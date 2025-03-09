@@ -68,4 +68,4 @@ npm run dev
 
 - [EduChain Chain Explorer](https://bridge.gelato.network/bridge/open-campus-codex)
 
-Built with ❤️ by the dropps07
+Built with ❤️ by dropps07
