@@ -434,7 +434,7 @@ export const CONTRACT_ABI = [
               "type": "bool"
             }
           ],
-          "internalType": "struct KryptoTix.Event",
+          "internalType": "struct Tixets.Event",
           "name": "",
           "type": "tuple"
         }
@@ -480,7 +480,7 @@ export const CONTRACT_ABI = [
               "type": "bool"
             }
           ],
-          "internalType": "struct KryptoTix.UserProfile",
+          "internalType": "struct Tixets.UserProfile",
           "name": "",
           "type": "tuple"
         }
