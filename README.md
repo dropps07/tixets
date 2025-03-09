@@ -14,6 +14,13 @@
 - **💰 Multi-Currency Payments** :– Accepts EduChain tokens and other cryptocurrencies for seamless transactions.
 
 # 🚀Getting Started
+
+## ⛳️ RoadMap
+
+```bash
+
+```
+
 ```bash
 # Clone the repository
 git clone https://github.com/dropps07/tixets.git
@@ -35,7 +42,7 @@ npm run dev
 3. Explore Events
 4. Purchased Tickets are present in your Profile
 
-## Note
+## ⚠️ Note
 *Must have required EDU test tokens*
 Get Some from here
 - [EDUCHAIN community faucet](https://educhain-community-faucet.vercel.app/)
