@@ -34,12 +34,3 @@ body {
 .gradient-button:hover {
   opacity: 0.9;
 }
-.customCursor{
-  cursor: url('../../public/cursors/normal.png'), auto;
-}
-button{
-  cursor: url('../../public/cursors/focus.png'), auto;
-}
-.swiper-wrapper{
-  cursor: url('../../public/cursors/focus.png'), auto !important;
-}
