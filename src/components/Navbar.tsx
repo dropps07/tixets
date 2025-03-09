@@ -51,7 +51,7 @@ const checkConnection = async () => {
 // Initial connection check
 useEffect(() => {
   checkConnection();
-}, []);
+}, [checkConnection]);
 
 // Fix EDUCHAIN_PARAMS to use proper hex format for chainId
 const EDUCHAIN_PARAMS = {
@@ -211,7 +211,7 @@ useEffect(() => {
       window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
     };
   }
-}, []);
+}, [EDUCHAIN_PARAMS.chainId, checkConnection]);
   const handleUsernameRegistration = (newUsername: string) => {
     setUsername(newUsername);
   };
