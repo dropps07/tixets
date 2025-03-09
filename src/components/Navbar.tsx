@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ethers } from 'ethers';
@@ -13,8 +13,20 @@ const Navbar = () => {
   const [address, setAddress] = useState('');
   const [username, setUsername] = useState('');
   const [showModal, setShowModal] = useState(false);
-   // Define checkConnection function outside of useEffect so it can be called elsewhere
-const checkConnection = async () => {
+ 
+const EDUCHAIN_PARAMS = {
+  chainId: '0x' + Number(656476).toString(16), // Convert to hex with 0x prefix
+  chainName: 'EduChain',
+  nativeCurrency: {
+    name: 'Wei',
+    symbol: 'EDU',
+    decimals: 18,
+  },
+  rpcUrls: ['https://open-campus-codex.gelato.digital'],
+  blockExplorerUrls: ['https://opencampus-codex.blockscout.com'],
+};
+  // REPLACE checkConnection function (lines 17-47) with:
+const checkConnection = useCallback(async () => {
   if (typeof window.ethereum !== 'undefined') {
     try {
       // Check if we're connected to EduChain first
@@ -46,25 +58,12 @@ const checkConnection = async () => {
       console.error('Error checking connection:', error);
     }
   }
-};
+}, [EDUCHAIN_PARAMS.chainId]);
 
 // Initial connection check
 useEffect(() => {
   checkConnection();
 }, [checkConnection]);
-
-// Fix EDUCHAIN_PARAMS to use proper hex format for chainId
-const EDUCHAIN_PARAMS = {
-  chainId: '0x' + Number(656476).toString(16), // Convert to hex with 0x prefix
-  chainName: 'EduChain',
-  nativeCurrency: {
-    name: 'Wei',
-    symbol: 'EDU',
-    decimals: 18,
-  },
-  rpcUrls: ['https://open-campus-codex.gelato.digital'],
-  blockExplorerUrls: ['https://opencampus-codex.blockscout.com'],
-};
 
 const switchToEduChain = async () => {
   try {
@@ -75,6 +74,7 @@ const switchToEduChain = async () => {
     });
     console.log('Switched to EduChain');
     return true;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (switchError: any) {
     // If the network is not added, prompt the user to add it
     if (switchError.code === 4902) {
@@ -212,6 +212,8 @@ useEffect(() => {
     };
   }
 }, [EDUCHAIN_PARAMS.chainId, checkConnection]);
+
+
   const handleUsernameRegistration = (newUsername: string) => {
     setUsername(newUsername);
   };
