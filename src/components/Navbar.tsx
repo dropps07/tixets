@@ -22,8 +22,8 @@ const EDUCHAIN_PARAMS = {
     symbol: 'EDU',
     decimals: 18,
   },
-  rpcUrls: ['https://open-campus-codex.gelato.digital'],
-  blockExplorerUrls: ['https://opencampus-codex.blockscout.com'],
+  rpcUrls: ['https://rpc.open-campus-codex.gelato.digital'],
+  blockExplorerUrls: ['https://edu-chain-testnet.blockscout.com'],
 };
   // REPLACE checkConnection function (lines 17-47) with:
 const checkConnection = useCallback(async () => {
