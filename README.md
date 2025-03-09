@@ -53,9 +53,10 @@ npm run dev
 
 ![Screenshot 2025-03-08 140008](https://github.com/user-attachments/assets/4f8cc541-b3e6-467b-aa59-40b638150b26)
 
-![Screenshot 2025-03-08 140345](https://github.com/user-attachments/assets/045c736b-9d96-4659-b1e2-9232b1b95c85)
+![Screenshot 2025-03-09 183022](https://github.com/user-attachments/assets/51252280-0457-4ea6-b0fa-a407f36e4f31)
 
-![Screenshot 2025-03-08 140744](https://github.com/user-attachments/assets/6b777aa9-58b3-4f5a-a1e3-3df171b58700)
+![Screenshot 2025-03-09 183000](https://github.com/user-attachments/assets/081707e1-495f-470c-89b3-e3c6ea052bf8)
+
 
 ## 🚀 Why Choose Our Platform?
 
