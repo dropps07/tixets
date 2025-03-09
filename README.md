@@ -49,15 +49,13 @@ npm run dev
 - Recommended: Deployed using remix.ide (can also use Hardhat)
 
 ## Screenshots
-![Screenshot 2025-03-08 141235](https://github.com/user-attachments/assets/d40d8837-b63f-4c71-a3c1-5a554f984aac)
+![Screenshot 2025-03-09 191518](https://github.com/user-attachments/assets/dcb3298b-8a90-4900-9042-88a71164a63d)
 
-![Screenshot 2025-03-08 140008](https://github.com/user-attachments/assets/4f8cc541-b3e6-467b-aa59-40b638150b26)
+![Screenshot 2025-03-09 192009](https://github.com/user-attachments/assets/a78102aa-3772-4d26-933f-9a2c197cacdf)
 
-![Screenshot 2025-03-09 183205](https://github.com/user-attachments/assets/e77e5919-bde6-4821-a87c-acfa6320cc5a)
+![Screenshot 2025-03-09 191945](https://github.com/user-attachments/assets/37b340d8-c675-4992-bdb9-6d7b12ff2c8d)
 
-
-![Screenshot 2025-03-09 183000](https://github.com/user-attachments/assets/081707e1-495f-470c-89b3-e3c6ea052bf8)
-
+![Screenshot 2025-03-09 192030](https://github.com/user-attachments/assets/ae7a49a8-e5e6-4c3b-8486-59d22fe501a8)
 
 ## 🚀 Why Choose Our Platform?
 
