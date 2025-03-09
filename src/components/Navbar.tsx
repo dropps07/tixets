@@ -113,43 +113,83 @@ const Navbar = () => {
   return (
     <>
       <motion.nav 
-        className="flex justify-between items-center py-4 px-8 bg-black "
+        className="relative py-4 px-6 md:px-10 bg-black border-b border-gray-800"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="flex items-center space-x-6">
-          <Link href="/" className="text-2xl font-bold gradient-text">
-            Tixets
-          </Link>
-          <Link href="/events" className="text-white hover:text-white-300">
-            Events
-          </Link>
-          <Link href="/create-event" className="text-white hover:text-white-300">
-            Create Event
-          </Link>
-        </div>
-        <div className="flex items-center space-x-4">
-          <button className="text-white hover:text-gray-300">
-            <Search size={20} />
-          </button>
-          {isConnected ? (
-            <Link href="/profile" className="text-white hover:text-gray-300 flex items-center">
-              <User size={20} className="mr-2" />
-              {username || address || 'Profile'}
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          {/* Logo and Navigation Links */}
+          <div className="flex items-center space-x-1 md:space-x-8">
+            <Link href="/" className="text-2xl font-bold relative group">
+              <span className="gradient-text">Tixets</span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-600 to-cyan-300 group-hover:w-full transition-all duration-300"></span>
             </Link>
-          ) : (
-            <motion.button
-              onClick={connectWallet}
-              className="gradient-button px-4 py-2 rounded-full text-white font-semibold"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Connect Wallet
-            </motion.button>
-          )}
+            
+            <div className="hidden md:flex space-x-6 ml-6">
+              <Link href="/events" className="text-white opacity-80 hover:opacity-100 relative group px-1">
+                Events
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-300 group-hover:w-full transition-all duration-300"></span>
+              </Link>
+              <Link href="/create-event" className="text-white opacity-80 hover:opacity-100 relative group px-1">
+                Create Event
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-300 group-hover:w-full transition-all duration-300"></span>
+              </Link>
+            </div>
+          </div>
+  
+          {/* Right side items */}
+          <div className="flex items-center space-x-6">
+            {/* Search button with hover effect */}
+            <button className="text-white opacity-80 hover:opacity-100 relative p-2 group">
+              <Search size={20} />
+              <span className="absolute inset-0 rounded-full border border-transparent group-hover:border-gray-700 transition-all duration-300"></span>
+            </button>
+            
+            {/* Conditional rendering for connected/not connected state */}
+            {isConnected ? (
+              <Link href="/profile" className="flex items-center space-x-2 relative group">
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 to-cyan-300 blur-md opacity-30 group-hover:opacity-60 transition-opacity duration-300"></div>
+                  <div className="relative z-10 bg-black bg-opacity-80 p-1.5 rounded-full">
+                    <User size={18} className="text-white" />
+                  </div>
+                </div>
+                <span className="text-white opacity-90 group-hover:opacity-100 hidden md:block truncate max-w-32">
+                  {username || address?.substring(0, 6) + '...' || 'Profile'}
+                </span>
+              </Link>
+            ) : (
+              <motion.button
+                onClick={connectWallet}
+                className="relative overflow-hidden px-5 py-2 rounded-xl bg-transparent text-white font-medium border border-gray-800 group"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-purple-600/20 to-cyan-300/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                <span className="relative z-10 flex items-center">
+                  <span className="mr-2 text-cyan-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"></path>
+                    </svg>
+                  </span>
+                  Connect Wallet
+                </span>
+              </motion.button>
+            )}
+            
+            {/* Hamburger menu for mobile - Optional */}
+            <button className="md:hidden text-white p-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
         </div>
       </motion.nav>
+  
       <UsernameRegistrationModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
