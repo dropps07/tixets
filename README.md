@@ -53,7 +53,8 @@ npm run dev
 
 ![Screenshot 2025-03-08 140008](https://github.com/user-attachments/assets/4f8cc541-b3e6-467b-aa59-40b638150b26)
 
-![Screenshot 2025-03-09 183022](https://github.com/user-attachments/assets/51252280-0457-4ea6-b0fa-a407f36e4f31)
+![Screenshot 2025-03-09 183205](https://github.com/user-attachments/assets/e77e5919-bde6-4821-a87c-acfa6320cc5a)
+
 
 ![Screenshot 2025-03-09 183000](https://github.com/user-attachments/assets/081707e1-495f-470c-89b3-e3c6ea052bf8)
 
