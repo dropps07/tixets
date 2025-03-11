@@ -9,6 +9,9 @@ const config: Config = {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        'syne': ['Syne', 'sans-serif'],
+      },
       colors: {
         neon: {
           green: '#39FF14',
