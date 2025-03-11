@@ -62,7 +62,8 @@ Get Some from here
 - Recommended: Deployed using remix.ide (can also use Hardhat)
 
 ## Screenshots
-![Screenshot 2025-03-09 191518](https://github.com/user-attachments/assets/dcb3298b-8a90-4900-9042-88a71164a63d)
+
+![Screenshot 2025-03-12 000953](https://github.com/user-attachments/assets/f7fec714-0a68-4404-830e-a864256d9980)
 
 ![Screenshot 2025-03-09 192009](https://github.com/user-attachments/assets/a78102aa-3772-4d26-933f-9a2c197cacdf)
 
