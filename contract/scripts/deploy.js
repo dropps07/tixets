@@ -2,7 +2,7 @@ const hre = require("hardhat");
 
 async function main() {
   try {
-    console.log("Starting deployment of KryptoTix...");
+    console.log("Starting deployment of tixets...");
 
     // Get the deployer's signer
     const [deployer] = await hre.ethers.getSigners();
@@ -12,19 +12,19 @@ async function main() {
     const balance = await deployer.provider.getBalance(deployer.address);
     console.log("Account balance:", hre.ethers.formatEther(balance));
 
-    // Deploy KryptoTix
-    const KryptoTix = await hre.ethers.getContractFactory("KryptoTix", deployer);
-    console.log("Deploying KryptoTix...");
-    const kryptoTix = await KryptoTix.deploy();
+    // Deploy tixets
+    const Tixets = await hre.ethers.getContractFactory("tixets", deployer);
+    console.log("Deploying tixets...");
+    const tixets = await Tixets.deploy();
 
-    await kryptoTix.waitForDeployment();
+    await tixets.waitForDeployment();
     const contractAddress = await kryptoTix.getAddress();
 
-    console.log("KryptoTix deployed to:", contractAddress);
+    console.log("tixets is deployed to:", contractAddress);
     
     // Wait for block confirmations
     console.log("Waiting for block confirmations...");
-    await kryptoTix.deploymentTransaction().wait(5);
+    await tixets.deploymentTransaction().wait(5);
     console.log("Deployment confirmed!");
 
     // Create a test event
