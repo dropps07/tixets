@@ -107,7 +107,7 @@ export default function Events() {
           setUserTickets(userTicketsObj);
         } catch (error) {
           console.error('Error fetching events:', error);
-          setError('Failed to load events. Please try again.');
+          setError('No Events for now, How about creating one!?.');
         } finally {
           setLoading(false);
         }
@@ -162,16 +162,18 @@ export default function Events() {
 
   if (error) {
     return (
+      <div className="min-h-screen w-full bg-black">
       <motion.div 
         className="flex flex-col items-center justify-center h-[60vh]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <div className="bg-black/20 p-6 rounded-lg border border-red-500">
+        <div className="bg-black p-6 rounded-lg border border-red-500">
           <h2 className="text-2xl font-bold text-red-500 mb-2">Error</h2>
-          <p className="text-gray-300">{error}</p>
+          <p className="text-red">{error}</p>
         </div>
       </motion.div>
+        </div>
     );
   }
 
