@@ -18,7 +18,7 @@ async function main() {
     const tixets = await Tixets.deploy();
 
     await tixets.waitForDeployment();
-    const contractAddress = await kryptoTix.getAddress();
+    const contractAddress = await tixets.getAddress();
 
     console.log("tixets is deployed to:", contractAddress);
     
