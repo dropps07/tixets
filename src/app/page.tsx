@@ -64,7 +64,7 @@ export default function Home() {
           variants={itemVariants}
         >
           <motion.h1 
-            className={`text-5xl md:text-7xl font-bold mb-6 text-white font-syne font-400`}
+            className={`text-5xl md:text-7xl font-bold mb-6 text-white ${syne.className} font-400`}
             variants={itemVariants}
           >
             Welcome to tixets
