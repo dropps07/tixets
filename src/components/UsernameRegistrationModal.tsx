@@ -48,19 +48,19 @@ const UsernameRegistrationModal: React.FC<UsernameRegistrationModalProps> = ({ i
           exit={{ opacity: 0 }}
         >
           <motion.div
-            className="bg-black-800 rounded-lg p-8 w-full max-w-md"
+            className="bg-black rounded-lg p-8 w-full max-w-md border-2 border-gradient-to-r from-purple-600 to-cyan-300 shadow-[0_0_10px_rgba(147,51,234,0.5)]"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
           >
-            <h2 className="text-2xl font-bold mb-4 gradient-text">Register Username</h2>
+            <h2 className="text white text-2xl font-bold mb-4">Create Username</h2>
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Enter your username"
-                className="w-full p-2 mb-4 bg-gray-700 text-white rounded"
+                className="w-full p-2 mb-4 bg-black text-white rounded border-bg-gradient-to-r from-purple-600 to-cyan-300 shadow-[0_0_10px_rgba(147,51,234,0.5)]"
                 required
               />
               {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -68,13 +68,13 @@ const UsernameRegistrationModal: React.FC<UsernameRegistrationModalProps> = ({ i
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 bg-gray-600 text-white rounded"
+                  className="px-4 py-2 bg-black text-white border-2 rounded hover:bg-white hover:text-black hover:border-black transition-all transitoion-300"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="gradient-button px-4 py-2 rounded text-white"
+                  className="bg-black border-2 px-4 py-2 rounded text-white hover:border-black hover:bg-white hover:text-black transition-all transitoion-330"
                 >
                   Register
                 </button>
