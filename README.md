@@ -3,7 +3,7 @@
 
 *A Decentralized event creation and ticket booking web application deployed on EduChain blockchain for EduChain semester-3 Hackathon!!*
 
-[Verfify Contract Here](https://edu-chain-testnet.blockscout.com/address/0x82b5De4E42D499421F5A2E43fd7d04054811A326).
+[Verify Contract Here](https://edu-chain-testnet.blockscout.com/address/0x82b5De4E42D499421F5A2E43fd7d04054811A326).
 
 
 ## 🌟 Features
