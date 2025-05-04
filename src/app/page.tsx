@@ -309,7 +309,7 @@ export default function Home() {
                     {testimonial.name.charAt(0)}
                   </div>
                 </div>
-                <p className="text-gray-300 italic mb-4">"{testimonial.content}"</p>
+                <p className="text-gray-300 italic mb-4">{testimonial.content}</p>
                 <h4 className="text-white font-semibold">{testimonial.name}</h4>
                 <p className="text-gray-400 text-sm">{testimonial.role}</p>
               </motion.div>
@@ -436,7 +436,7 @@ export default function Home() {
             >
               <Mail size={40} className="mb-4 text-white" />
               <h3 className="text-2xl font-bold mb-3 text-white">Business Collaboration</h3>
-              <p className="text-gray-200 mb-6">Interested in partnership opportunities or implementing our blockchain ticketing solution for your events? Let's connect.</p>
+              <p className="text-gray-200 mb-6">Interested in partnership opportunities or implementing our blockchain ticketing solution for your events? Lets connect.</p>
               <Link 
                 href="/contact" 
                 className="bg-purple-800/70 text-white border-2 border-white group px-6 py-3 rounded-full text-md font-semibold flex items-center justify-center hover:bg-white hover:border-purple-800 hover:text-purple-800 transition-colors"
