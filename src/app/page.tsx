@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ChevronRight, ChevronDown, ChevronUp, MessageCircle, Book, Mail } from 'lucide-react';
-import { Syne } from 'next/font/google';
 import Image from 'next/image';
 
 const containerVariants = {
@@ -28,12 +27,6 @@ const itemVariants = {
     }
   }
 };
-
-const syne = Syne({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-});
-
 export default function Home() {
   const [activeQuestion, setActiveQuestion] = useState<number | null>(null);
 
