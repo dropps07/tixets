@@ -36,7 +36,7 @@ const Navbar = () => {
   };
 
   // Close profile dropdown when clicking outside
-  useEffect(() => {
+  useEffect(() => { // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function handleClickOutside(event: { target: any; }) {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
         setProfileOpen(false);
@@ -63,7 +63,7 @@ const Navbar = () => {
     
     // Cleanup function
     return () => {
-      document.body.style.paddingTop = '0';
+      document.body.style.paddingTop = `${0}px`;
     };
   }, []);
 
@@ -225,6 +225,7 @@ const Navbar = () => {
   };
 
   // Helper function to check user profile
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const checkUserProfile = async (address: any) => {
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -277,6 +278,7 @@ const Navbar = () => {
       };
       
       // Handle account changes
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const handleAccountsChanged = (accounts: string | any[]) => {
         if (accounts.length === 0) {
           // User disconnected their wallet
