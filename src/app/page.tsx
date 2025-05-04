@@ -112,7 +112,7 @@ export default function Home() {
     <div className="min-h-screen bg-black">
       {/* Hero Section */}
       <motion.section 
-        className="min-h-screen flex flex-col justify-center items-center text-center px-4 relative overflow-hidden"
+        className="min-h-[75vh] flex flex-col justify-center items-center text-center px-4 relative overflow-hidden"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
