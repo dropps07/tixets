@@ -25,18 +25,19 @@ const EDUCHAIN_PARAMS = {
   rpcUrls: ['https://rpc.open-campus-codex.gelato.digital'],
   blockExplorerUrls: ['https://edu-chain-testnet.blockscout.com'],
 };
-  // REPLACE checkConnection function (lines 17-47) with:
+  
+
 const checkConnection = useCallback(async () => {
   if (typeof window.ethereum !== 'undefined') {
     try {
-      // Check if we're connected to EduChain first
+      // Checking if we're connected to EduChain first
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const network = await provider.getNetwork();
       
-      // Convert EDUCHAIN_PARAMS.chainId to the format needed for comparison
+      // Converting EDUCHAIN_PARAMS.chainId to the format needed for comparison
       const eduChainId = parseInt(EDUCHAIN_PARAMS.chainId, 16);
       
-      // If not on EduChain, don't proceed with auto-connection
+      // If not on EduChain, not proceeding with auto-connection
       if (network.chainId !== eduChainId) {
         console.log('Not connected to EduChain. Please connect to correct network.');
         return;
@@ -149,7 +150,6 @@ const connectWallet = async () => {
     alert('Please install MetaMask!');
   }
 };
-
 // Helper function to check user profile
 const checkUserProfile = async (address: string) => {
   try {
@@ -169,7 +169,7 @@ const checkUserProfile = async (address: string) => {
   }
 };
 
-// Add wallet event listeners
+// Adding wallet event listeners
 useEffect(() => {
   if (window.ethereum) {
     // Handle chain changes
@@ -183,7 +183,7 @@ useEffect(() => {
         setUsername('');
         alert('Please connect to EduChain network to use this application');
       } else {
-        // Reconnect if switched to the correct chain
+        // Reconnecting if switched to the correct chain
         checkConnection();
       }
     };
@@ -220,13 +220,14 @@ useEffect(() => {
 
   return (
     <>
-      <motion.nav 
-        className="relative py-4 px-6 md:px-10 bg-black border-b border-gray-800"
+      <motion.div 
+        className="fixed top-4 left-0 right-0 flex justify-center z-50"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <div className="w-11/12 max-w-6xl py-4 px-6 md:px-10 bg-black/25 backdrop-blur-md border border-gray-800/40 rounded-2xl shadow-lg">
+          <div className="flex justify-between items-center">
           {/* Logo and Navigation Links */}
           <div className="flex items-center space-x-1 md:space-x-8">
             <Link href="/" className="text-2xl font-bold relative group">
@@ -270,7 +271,7 @@ useEffect(() => {
             ) : (
               <motion.button
                 onClick={connectWallet}
-                className="relative overflow-hidden px-5 py-2 rounded-xl bg-transparent text-white font-medium border border-gray-800 group"
+                className="relative overflow-hidden px-5 py-2 rounded-xl bg-transparent text-white font-medium border border-gray-700 group"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
@@ -295,8 +296,9 @@ useEffect(() => {
               </svg>
             </button>
           </div>
+                  </div>
         </div>
-      </motion.nav>
+      </motion.div>
   
       <UsernameRegistrationModal
         isOpen={showModal}
