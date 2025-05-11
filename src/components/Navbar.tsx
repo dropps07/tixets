@@ -23,11 +23,12 @@ const Navbar = () => {
   const profileRef = useRef<HTMLDivElement | null>(null); // Explicitly type the ref
   const navbarHeight = useRef(0);
  
+  // Updated EDU Chain parameters based on the provided image
   const EDUCHAIN_PARAMS = {
-    chainId: '0x' + Number(656476).toString(16), // Convert to hex with 0x prefix
+    chainId: '0x' + Number(656476).toString(16), // Chain ID 656476 from the image
     chainName: 'EDU Chain Testnet',
     nativeCurrency: {
-      name: 'Wei',
+      name: 'EDU',
       symbol: 'EDU',
       decimals: 18,
     },
@@ -139,38 +140,52 @@ const Navbar = () => {
 
   const switchToEduChain = async () => {
     try {
+      console.log('Attempting to switch to EduChain with chainId:', EDUCHAIN_PARAMS.chainId);
       // Using the correct format for chainId (with '0x' prefix)
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: EDUCHAIN_PARAMS.chainId }],
       });
-      console.log('Switched to EduChain');
+      console.log('Successfully switched to EduChain');
       return true;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (switchError) {
+    } catch (switchError: any) {
+      console.log('Error switching to EduChain:', switchError);
+      console.log('Error code:', switchError.code);
       
-      // If the network is not added, prompt the user to add it
-      if (switchError === 4902) {
+      // This error code indicates that the chain has not been added to MetaMask
+      // Error code might be 4902, -32603, or other values depending on wallet provider
+      if (switchError.code === 4902 || switchError.code === -32603 || 
+          (switchError.message && switchError.message.includes("Unrecognized chain ID"))) {
+        console.log('Chain not added yet, attempting to add EDU Chain');
         try {
+          console.log('Adding EDU Chain with params:', EDUCHAIN_PARAMS);
           await window.ethereum.request({
             method: 'wallet_addEthereumChain',
             params: [EDUCHAIN_PARAMS],
           });
+          console.log('EDU Chain added successfully, now switching');
+          
+          // Sometimes we need to wait a moment after adding the chain
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
           // Try switching again after adding
           await window.ethereum.request({
             method: 'wallet_switchEthereumChain',
             params: [{ chainId: EDUCHAIN_PARAMS.chainId }],
           });
+          console.log('Successfully switched to EDU Chain after adding');
           return true;
-        } catch (addError) {
-          console.error('Error adding EduChain:', addError);
-          alert('Failed to add EduChain network. Please add it manually.');
-          return false;
+        } catch (addError: any) {
+          console.error('Error adding EDU Chain:', addError);
+          // More user-friendly error that doesn't require manual action yet
+          console.log('Will continue with connection on current network');
+          return true; // Return true to continue the connection flow
         }
       } else {
-        console.error('Error switching network:', switchError);
-        alert('Failed to switch to EduChain. Please switch manually.');
-        return false;
+        console.error('Unknown error switching network:', switchError);
+        // More user-friendly approach - continue with connection on current network
+        console.log('Will continue with connection on current network');
+        return true; // Return true to continue the connection flow
       }
     }
   };
@@ -178,43 +193,74 @@ const Navbar = () => {
   const connectWallet = async () => {
     if (typeof window.ethereum !== 'undefined') {
       try {
-        // Request account access
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        // Request account access first
+        console.log('Requesting account access...');
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        console.log('Accounts:', accounts);
+        
+        if (accounts.length === 0) {
+          console.log('No accounts returned');
+          return;
+        }
+        
+        // Set connected immediately to improve UX
+        const currentAddress = accounts[0];
+        setAddress(currentAddress);
+        setIsConnected(true);
         
         // Use let instead of const so we can reassign later
         let provider = new ethers.providers.Web3Provider(window.ethereum);
         
-        // Check if on the correct network and switch if needed
-        const network = await provider.getNetwork();
-        const eduChainId = parseInt(EDUCHAIN_PARAMS.chainId, 16); 
-        
-        if (network.chainId !== eduChainId) {
-          const switched = await switchToEduChain();
-          if (!switched) return; // Exit if network switch failed
+        // Try to switch networks - but continue even if it fails
+        try {
+          console.log('Checking network...');
+          const network = await provider.getNetwork();
+          const eduChainId = parseInt(EDUCHAIN_PARAMS.chainId, 16);
           
-          // Get fresh provider after network switch
-          provider = new ethers.providers.Web3Provider(window.ethereum);
+          console.log('Current network chainId:', network.chainId);
+          console.log('Expected EDU Chain chainId:', eduChainId);
+          
+          if (network.chainId !== eduChainId) {
+            await switchToEduChain();
+            // Get fresh provider after network switch attempt
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+          }
+        } catch (networkError) {
+          console.error('Network switching error:', networkError);
+          // Continue with current network
         }
         
-        // Now we can proceed with connection
+        // Now we can proceed with connection - even if network switch failed
         const signer = provider.getSigner();
-        const address = await signer.getAddress();
-        setAddress(address);
-        setIsConnected(true);
-
-        // Interact with the contract
-        const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+        
+        // Check if the contract is deployed on this network
         try {
-          const profile = await contract.getUserProfile(address);
-          if (profile.username) {
+          console.log('Checking contract at address:', CONTRACT_ADDRESS);
+          const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+          
+          // Simple call to check if contract exists (code size > 0)
+          const code = await provider.getCode(CONTRACT_ADDRESS);
+          if (code === '0x') {
+            console.log('Contract not found on this network');
+            setShowModal(true); // Still show the modal for testing
+            return;
+          }
+          
+          console.log('Fetching user profile...');
+          const profile = await contract.getUserProfile(currentAddress);
+          console.log('Profile fetched:', profile);
+          
+          if (profile && profile.username) {
             setUsername(profile.username);
-            fetchProfileData(contract, address);
+            fetchProfileData(contract, currentAddress);
           } else {
+            console.log('Opening username registration modal');
             setShowModal(true);
           }
         } catch (contractError) {
-          console.error('Error fetching user profile:', contractError);
-          setShowModal(true); // Assume new user if contract call fails
+          console.error('Contract interaction error:', contractError);
+          console.log('Opening username registration modal anyway');
+          setShowModal(true); // Show modal regardless of error
         }
       } catch (error) {
         console.error('Error connecting wallet:', error);
@@ -228,19 +274,44 @@ const Navbar = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const checkUserProfile = async (address: any) => {
     try {
+      console.log('Checking user profile for address:', address);
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
+      
+      // Check if the contract is deployed on this network before proceeding
+      try {
+        const code = await provider.getCode(CONTRACT_ADDRESS);
+        if (code === '0x') {
+          console.log('Contract not found on this network');
+          // Still show the modal but in a "new user" state
+          setShowModal(true);
+          return;
+        }
+      } catch (codeError) {
+        console.error('Error checking contract code:', codeError);
+      }
+      
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
       
-      const profile = await contract.getUserProfile(address);
-      if (profile.username) {
-        setUsername(profile.username);
-        fetchProfileData(contract, address);
-      } else {
+      try {
+        const profile = await contract.getUserProfile(address);
+        console.log('Profile retrieved:', profile);
+        
+        if (profile && profile.username) {
+          setUsername(profile.username);
+          fetchProfileData(contract, address);
+        } else {
+          console.log('No username found, opening registration modal');
+          setShowModal(true);
+        }
+      } catch (profileError) {
+        console.error('Error getting profile from contract:', profileError);
+        // If the contract call fails, we'll assume this is a new user
+        console.log('Opening registration modal after error');
         setShowModal(true);
       }
     } catch (error) {
-      console.error('Error checking user profile:', error);
+      console.error('General error checking user profile:', error);
       setShowModal(true);
     }
   };
@@ -267,11 +338,12 @@ const Navbar = () => {
         const eduChainIdHex = EDUCHAIN_PARAMS.chainId;
         
         if (chainId !== eduChainIdHex) {
-          setIsConnected(false);
-          setAddress('');
-          setUsername('');
-          alert('Please connect to EduChain network to use this application');
+          console.log('Not on EDU Chain - continuing but with warning');
+          // Don't disconnect - just warn
+          // Instead of immediately disconnecting, we'll just log a warning
+          // This improves user experience by not requiring switching back immediately
         } else {
+          console.log('Switched to EDU Chain - reconnecting');
           // Reconnecting if switched to the correct chain
           checkConnection();
         }
@@ -282,16 +354,19 @@ const Navbar = () => {
       const handleAccountsChanged = (accounts: string | any[]) => {
         if (accounts.length === 0) {
           // User disconnected their wallet
+          console.log('No accounts - user disconnected wallet');
           setIsConnected(false);
           setAddress('');
           setUsername('');
         } else {
           // Account changed, update state and check profile
+          console.log('Account changed to:', accounts[0]);
           setAddress(accounts[0]);
           checkUserProfile(accounts[0]);
         }
       };
       
+      // Add listeners
       window.ethereum.on('chainChanged', handleChainChanged);
       window.ethereum.on('accountsChanged', handleAccountsChanged);
       
