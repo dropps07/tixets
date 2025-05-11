@@ -115,7 +115,7 @@ export default function CreateEvent() {
         setLoading(false);
         return;
       }
-    } catch (err) {
+    } catch (_error) {
       setError("Invalid price format.");
       setLoading(false);
       return;
@@ -128,7 +128,7 @@ export default function CreateEvent() {
         setLoading(false);
         return;
       }
-    } catch (err) {
+    } catch (_error) {
       setError("Invalid ticket count format.");
       setLoading(false);
       return;
@@ -182,20 +182,26 @@ export default function CreateEvent() {
           await tx.wait();
           console.log("Transaction confirmed");
           router.push('/events');
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Transaction failed:", err);
           
           // Parse error message from smart contract
-          if (err.data) {
-            setError(`Contract error: ${err.data.message || "Transaction reverted"}`);
-          } else if (err.message && err.message.includes("user rejected")) {
-            setError("Transaction was rejected in your wallet.");
-          } else if (err.message) {
-            // Check if it's a revert message that can be decoded
-            if (err.message.includes("execution reverted")) {
-              setError("Contract error: Your event creation was rejected by the smart contract. Please check your inputs.");
+          if (typeof err === 'object' && err !== null) {
+            const errorObj = err as { data?: { message?: string }, message?: string };
+            
+            if (errorObj.data) {
+              const dataMessage = errorObj.data.message || "Transaction reverted";
+              setError(`Contract error: ${dataMessage}`);
+            } else if (errorObj.message) {
+              if (errorObj.message.includes("user rejected")) {
+                setError("Transaction was rejected in your wallet.");
+              } else if (errorObj.message.includes("execution reverted")) {
+                setError("Contract error: Your event creation was rejected by the smart contract. Please check your inputs.");
+              } else {
+                setError(`Error: ${errorObj.message}`);
+              }
             } else {
-              setError(`Error: ${err.message}`);
+              setError("Transaction failed. Please check your inputs and try again.");
             }
           } else {
             setError("Transaction failed. Please check your inputs and try again.");
