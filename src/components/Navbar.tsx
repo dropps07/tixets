@@ -37,9 +37,9 @@ const Navbar = () => {
   };
 
   // Close profile dropdown when clicking outside
-  useEffect(() => { // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    function handleClickOutside(event: { target: any; }) {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
         setProfileOpen(false);
       }
     }
@@ -148,14 +148,15 @@ const Navbar = () => {
       });
       console.log('Successfully switched to EduChain');
       return true;
-    } catch (switchError: any) {
+    } catch (switchError: unknown) {
+      const error = switchError as { code?: number; message?: string };
       console.log('Error switching to EduChain:', switchError);
-      console.log('Error code:', switchError.code);
+      console.log('Error code:', error.code);
       
       // This error code indicates that the chain has not been added to MetaMask
       // Error code might be 4902, -32603, or other values depending on wallet provider
-      if (switchError.code === 4902 || switchError.code === -32603 || 
-          (switchError.message && switchError.message.includes("Unrecognized chain ID"))) {
+      if (error.code === 4902 || error.code === -32603 || 
+          (error.message && error.message.includes("Unrecognized chain ID"))) {
         console.log('Chain not added yet, attempting to add EDU Chain');
         try {
           console.log('Adding EDU Chain with params:', EDUCHAIN_PARAMS);
@@ -175,7 +176,7 @@ const Navbar = () => {
           });
           console.log('Successfully switched to EDU Chain after adding');
           return true;
-        } catch (addError: any) {
+        } catch (addError: unknown) {
           console.error('Error adding EDU Chain:', addError);
           // More user-friendly error that doesn't require manual action yet
           console.log('Will continue with connection on current network');
@@ -271,8 +272,7 @@ const Navbar = () => {
   };
 
   // Helper function to check user profile
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const checkUserProfile = async (address: any) => {
+  const checkUserProfile = async (address: string) => {
     try {
       console.log('Checking user profile for address:', address);
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -350,8 +350,7 @@ const Navbar = () => {
       };
       
       // Handle account changes
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const handleAccountsChanged = (accounts: string | any[]) => {
+      const handleAccountsChanged = (accounts: string[]) => {
         if (accounts.length === 0) {
           // User disconnected their wallet
           console.log('No accounts - user disconnected wallet');
