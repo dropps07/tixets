@@ -115,6 +115,7 @@ export default function CreateEvent() {
         setLoading(false);
         return;
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_error) {
       setError("Invalid price format.");
       setLoading(false);
@@ -127,7 +128,7 @@ export default function CreateEvent() {
         setError("Total tickets must be greater than zero.");
         setLoading(false);
         return;
-      }
+      }// eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_error) {
       setError("Invalid ticket count format.");
       setLoading(false);
